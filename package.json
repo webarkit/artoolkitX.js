@@ -1,0 +1,25 @@
+{
+  "name": "artoolkitx.js",
+  "version": "1.0.0",
+  "description": "artoolkitX.js is a JavaScript version (compiled with Emscripten) of artoolkitX. artoolkitX version 1.0 is a software development kit (SDK) consisting of libraries and utilities that help developers implement the foundation of great augmented and mixed reality applications. The SDK includes some examples of applications that demonstrate the capabilities of artoolkitX. artoolkitX supports a wide-variety of platforms, including iOS and Android, and macOS, Windows, and Linux. artoolkitX is free to use! The SDK is licensed under the GNU Lesser General Public License version 3.0, allowing for linking into both closed- and open-source software. Please read the file license to understand your rights and obligations when using artoolkitX. artoolkitX.js is released under LGPL v3.0 or later for non-commercial use. Please contact me for commercial usage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server -o"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:augmentmy-world/artoolkitX.js.git"
+  },
+  "keywords": [
+    "artoolkitX",
+    "AR",
+    "Augmented Reality"
+  ],
+  "author": "Thorsten Bux <thor_bux@augmentmy.world>",
+  "license": "LGPL-3.0-or-later",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  },
+  "dependencies": {}
+}

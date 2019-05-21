@@ -1,0 +1,37 @@
+<html>
+<body>
+
+<img id="v1" src="./Data/armchair.jpg"></img>
+<script type="module" src="../SDK/lib/artoolkitX.api.js"></script>
+<script type="module">
+import ARController from '../SDK/lib/artoolkitX.api.js';
+
+var ar1;
+var cameraParam = '';
+
+ar1 = new ARController(v1, cameraParam);
+var trackable = {
+    trackableType: "single_barcode",
+    barcodeId: 36
+}
+
+ar1.addEventListener('getMarker', (trackableInfo) => {
+    console.log("TrackableID: " + trackableInfo.data.trackableId);
+    console.log(trackableInfo.data.transformation);
+});
+
+try {
+    ar1.setLogLevel(0);
+    ar1.start().then( () => {
+        console.log("start done");
+        var trackableId = ar1.addTrackable(trackable);
+        ar1.process();
+    });
+}
+catch (e) {
+    console.log(e);
+}
+</script>
+
+</body>
+</html>
