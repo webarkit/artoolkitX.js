@@ -2,9 +2,9 @@
 <body>
 
 <img id="v1" src="./Data/armchair.jpg"></img>
-<script type="module" src="../SDK/lib/artoolkitX.api.js"></script>
+<script type="module" src="./artoolkitX.api.js"></script>
 <script type="module">
-import ARController from '../SDK/lib/artoolkitX.api.js';
+import ARController from './artoolkitX.api.js';
 
 var ar1;
 var cameraParam = '';
@@ -21,7 +21,7 @@ ar1.addEventListener('getMarker', (trackableInfo) => {
 });
 
 try {
-    ar1.setLogLevel(0);
+    //ar1.setLogLevel(0);
     ar1.start().then( () => {
         console.log("start done");
         var trackableId = ar1.addTrackable(trackable);
