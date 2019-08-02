@@ -40,6 +40,7 @@ locate_artkX() {
         read -p "Would you like to clone the submodule (recommended) y/n" -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]] ; then
+            cd ..
             git submodule init
             git submodule update --remote
         else
