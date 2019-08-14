@@ -6,11 +6,12 @@
   <script type="module" src="../SDK/lib/artoolkitx.js"></script>
   <script type="module">
     import arxjs from '../SDK/lib/artoolkitx.js';
+     window.addEventListener('artoolkitX-loaded', () => {
     // this is reached when everything is ready, and you can call methods on Module
     console.log(arxjs.initialiseAR());
     console.log('version result: ' + arxjs.getARToolKitVersion());
     console.log('Is running: ' + arxjs.isRunning());
-    console.log('Detect marker: ' + arxjs.detectMarker());
+    //console.log('Detect marker: ' + arxjs.detectMarker());
     console.log('Is Initialized: ' + arxjs.isInitialized());
 
     console.log('Video Params: ' + arxjs.getVideoParams());
@@ -19,14 +20,14 @@
     var trackableId = arxjs.addTrackable("single_barcode;0;80");
     console.log('Add trackable: ' + trackableId);
     console.log('Query pattern count: ' + arxjs.getTrackablePatternCount(trackableId));
-    console.log('Query trackable(' + trackableId + ') visiblity: ' + arxjs.queryTrackableVisibilityAndTransformation(trackableId));
+    console.log('Query trackable(' + trackableId + ') visiblity: ' + arxjs._arwQueryTrackableVisibilityAndTransformation(trackableId));
     console.log('getTrackablePatternConfig: ' + arxjs.getTrackablePatternConfig(trackableId,0).matrix);
     console.log('getTrackablePatternImage: ' + arxjs.getTrackablePatternImage(trackableId,0));
-    // console.log('arwLoadOpticalParams: ' + arxjs.loadOpticalParams('Data/camera_para.dat', undefined, 1.0, 1000.0));
+    //console.log('arwLoadOpticalParams: ' + arxjs.loadOpticalParams('Data/camera_para.dat', undefined, 1.0, 1000.0));
 
     console.log('Remove trackable: ' + arxjs.removeTrackable(trackableId));
     console.log('Stop running: ' + arxjs.stopRunning());
     console.log('Shutdown AR: ' + arxjs.shutdownAR());
-
+});
   </script>
 </html>

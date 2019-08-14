@@ -52,6 +52,15 @@ import artoolkitXjs from "./artoolkitx.js";
         this.transform_mat = new Float64Array(16);
         this.videoSize = this.videoWidth * this.videoHeight;
 
+        this.count = 0;
+        this.ARWTrackableStatus = {
+          uid: 0,
+          visible: false,
+          matrix: new Float64Array(16),
+          matrixR: new Float64Array(16)
+        };
+        //console.log(this.ARWTrackableStatus);
+
         //debugging
         this._lumaCtx = undefined;
         this.cameraParaFileURL = cameraPara;
@@ -292,6 +301,7 @@ import artoolkitXjs from "./artoolkitx.js";
      * @param {number} trackableUID	The unique identifier (UID) of the marker to query
      * @return	{Float32Array} The dst array.
      */
+
     ARController.prototype.getTransMatSquare = function (trackableUID) {
         return this._queryTrackableVisibility(trackableUID);
     };
