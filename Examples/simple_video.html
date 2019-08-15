@@ -21,7 +21,7 @@ const config = {
 
 var trackable = {
     trackableType: "single_barcode",
-    barcodeId: 36
+    barcodeId: 1
 }
 
  window.addEventListener('artoolkitX-loaded', () => {
@@ -44,7 +44,7 @@ var arController = new ARController(v, cameraParam);
             }, 13);
             ar1 = arController;
         });
-  
+        arController.debugSetup();
     }
     catch (e) {
         console.log(e);

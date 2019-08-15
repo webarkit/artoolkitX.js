@@ -53,13 +53,6 @@ import artoolkitXjs from "./artoolkitx.js";
         this.videoSize = this.videoWidth * this.videoHeight;
 
         this.count = 0;
-        this.ARWTrackableStatus = {
-          uid: 0,
-          visible: false,
-          matrix: new Float64Array(16),
-          matrixR: new Float64Array(16)
-        };
-        //console.log(this.ARWTrackableStatus);
 
         //debugging
         this._lumaCtx = undefined;
@@ -732,10 +725,10 @@ import artoolkitXjs from "./artoolkitx.js";
 
           See setDebugMode.
       */
-    ARController.prototype.debugDraw = function () {
-        // var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
-        // var id = new ImageData(debugBuffer, this.videoWidth, this.videoHeight);
-        // this.ctx.putImageData(id, 0, 0);
+     ARController.prototype.debugDraw = function () {
+         // var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
+         // var id = new ImageData(debugBuffer, this.videoWidth, this.videoHeight);
+         // this.ctx.putImageData(id, 0, 0);
 
         //Debug Luma
         var lumaBuffer = new Uint8ClampedArray(this.framesize);
