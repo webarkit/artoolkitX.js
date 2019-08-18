@@ -1,9 +1,13 @@
 <html>
 <body>
+          <script type='text/javascript'>
+      window.artoolkitX_wasm_url = '../SDK/lib/artoolkitx.wasm';
+          </script>
 
-<script type="module" src="../SDK/lib/artoolkitX.api.js"></script>
-<script type="module">
-import ARController from '../SDK/lib/artoolkitX.api.js';
+          <script type="module" src="../SDK/lib/artoolkitX.api.js"></script>
+<video id="v" src="Data/output_4.mp4" width="320" height="240" loop="" controls="" autoplay></video>
+          <script type="module">
+          import ARController from '../SDK/lib/artoolkitX.api.js';
 
 let ar1, interval;
 
@@ -13,38 +17,40 @@ const config = {
     cameraParam: cameraParam,
     width: 640,
     height: 480
-}; 
+};
 
 var trackable = {
     trackableType: "single_barcode",
-    barcodeId: 36
+    barcodeId: 1
 }
 
-// window.addEventListener('artoolkitX-loaded', () => {
+ window.addEventListener('artoolkitX-loaded', () => {
 
-ARController.getUserMediaARController(config).then( arController => {
+//ARController.getUserMediaARController(config).then( arController => {
+var arController = new ARController(v, cameraParam);
 
     arController.addEventListener('getMarker', (trackableInfo) => {
         console.log("TrackableID: " + trackableInfo.data.trackableId);
         console.log(trackableInfo.data.transformation);
     });
-
+    var video = document.getElementById('v');
     try {
-        arController.setLogLevel(0);
+        //arController.setLogLevel(1);
         arController.start().then( () => {
             console.log("start done");
             var trackableId = arController.addTrackable(trackable);
             interval = setInterval(function() {
-                arController.process();
+                arController.process(video);
             }, 13);
-            ar1 = arController;        
+            ar1 = arController;
         });
+        arController.debugSetup();
     }
     catch (e) {
         console.log(e);
     }
-} );
-// });
+//} );
+ });
 
 window.closeVideo = function() {
     if(ar1) {

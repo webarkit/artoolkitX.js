@@ -4,21 +4,21 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           The ARController is the main object for doing augmented reality with artoolkitX.js.
-  
+
           To use an ARController, you need to tell which image or video stream to use and
           pass it an ARCameraParam object to define the camera parameters to use during processing.
           The ARCameraParam defines the lens distortion and aspect ratio of the camera used.
           See https://github.com/artoolkitx/artoolkitx/wiki/Using-the-artoolkitX-distributed-camera-calibration-system for more information.
-  
-          The dimensions of the image that you pass in as the first argument are used as AR processing canvas width and height. 
-  
+
+          The dimensions of the image that you pass in as the first argument are used as AR processing canvas width and height.
+
           The camera parameters argument is an URL to a camera definition file which immediately returns a Promise which resolves into a useable URL string.
-  
+
           @exports ARController
           @constructor
-  
+
           @param {HTMLImageElement | HTMLVideoElement} image The ARController treats it as an image and it tries to find a marker in that image
-          @param {string}  cameraPara A string to the camera para to use for image processing. 
+          @param {string}  cameraPara A string to the camera para to use for image processing.
       */
     var ARController = function (image, cameraPara) {
         this.orientation = "landscape";
@@ -51,6 +51,8 @@ import artoolkitXjs from "./artoolkitx.js";
         this.trackables = new Array();
         this.transform_mat = new Float64Array(16);
         this.videoSize = this.videoWidth * this.videoHeight;
+
+        this.count = 0;
 
         //debugging
         this._lumaCtx = undefined;
@@ -100,7 +102,7 @@ import artoolkitXjs from "./artoolkitx.js";
     /**
           Destroys the ARController instance and frees all associated resources.
           After calling dispose, the ARController can't be used any longer. Make a new one if you need one.
-  
+
           Calling this avoids leaking Emscripten memory.
       */
     ARController.prototype.dispose = function () {
@@ -119,12 +121,12 @@ import artoolkitXjs from "./artoolkitx.js";
     // TODO: MultiMarker and events
     /**
           Detects markers in the given image. The process method dispatches marker detection events during its run.
-  
+
           The marker detection process proceeds by first dispatching a markerNum event that tells you how many
           markers were found in the image. Next, a getMarker event is dispatched for each found marker square.
           Finally, getMultiMarker is dispatched for every found multimarker, followed by getMultiMarkerSub events
           dispatched for each of the markers in the multimarker.
-  
+
           If no image is given, defaults to this.image.
           @param {HTMLImageElement|HTMLVideoElement} [image] The image to process [optional].
       */
@@ -171,12 +173,12 @@ import artoolkitXjs from "./artoolkitx.js";
     /**
           Add an event listener on this ARController for the named event, calling the callback function
           whenever that event is dispatched.
-  
+
           Possible events are:
           * getMarker - dispatched whenever process() finds a square marker
           * getMultiMarker - dispatched whenever process() finds a visible registered multimarker
           * getMultiMarkerSub - dispatched by process() for each marker in a visible multimarker
-  
+
           @param {string} name Name of the event to listen to.
           @param {function} callback Callback function to call when an event with the given name is dispatched.
       */
@@ -189,7 +191,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Remove an event listener from the named event.
-  
+
           @param {string} name Name of the event to stop listening to.
           @param {function} callback Callback function to remove from the listeners of the named event.
       */
@@ -204,7 +206,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Dispatches the given event to all registered listeners on event.name.
-  
+
           @param {Object} event Event to dispatch.
       */
     ARController.prototype.dispatchEvent = function (event) {
@@ -292,6 +294,7 @@ import artoolkitXjs from "./artoolkitx.js";
      * @param {number} trackableUID	The unique identifier (UID) of the marker to query
      * @return	{Float32Array} The dst array.
      */
+
     ARController.prototype.getTransMatSquare = function (trackableUID) {
         return this._queryTrackableVisibility(trackableUID);
     };
@@ -459,7 +462,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Set the labeling threshold mode (auto/manual).
-  
+
           @param {number}	    mode An integer specifying the mode. One of:
               artoolkitXjs.LabelingThresholdMode.AR_LABELING_THRESH_MODE_MANUAL,
               artoolkitXjs.LabelingThresholdMode.AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
@@ -490,17 +493,17 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Set the labeling threshhold.
-  
+
           This function forces sets the threshold value.
           The default value is AR_DEFAULT_LABELING_THRESH which is 100.
-  
+
           The current threshold mode is not affected by this call.
           Typically, this function is used when labeling threshold mode
           is AR_LABELING_THRESH_MODE_MANUAL.
-  
+
           The threshold value is not relevant if threshold mode is
           AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
-  
+
           Background: The labeling threshold is the value which
           the AR library uses to differentiate between black and white
           portions of an ARToolKit marker. Since the actual brightness,
@@ -509,7 +512,7 @@ import artoolkitXjs from "./artoolkitx.js";
           value typically needs to be adjusted dynamically to a
           suitable midpoint between the observed values for black
           and white portions of the markers in the image.
-  
+
           @param {number}     threshold An integer in the range [0,255] (inclusive).
       */
     ARController.prototype.setThreshold = function (threshold) {
@@ -521,17 +524,17 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Get the current labeling threshold.
-  
+
           This function queries the current labeling threshold. For,
           AR_LABELING_THRESH_MODE_AUTO_MEDIAN, AR_LABELING_THRESH_MODE_AUTO_OTSU,
           and AR_LABELING_THRESH_MODE_AUTO_BRACKETING
           the threshold value is only valid until the next auto-update.
-  
+
           The current threshold mode is not affected by this call.
-  
+
           The threshold value is not relevant if threshold mode is
           AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
-  
+
           @return {number} The current threshold value.
       */
     ARController.prototype.getThreshold = function () {
@@ -542,7 +545,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Set the pattern detection mode
-  
+
           The pattern detection determines the method by which ARToolKit
           matches detected squares in the video image to marker templates
           and/or IDs. ARToolKit v4.x can match against pictorial "template" markers,
@@ -551,7 +554,7 @@ import artoolkitXjs from "./artoolkitx.js";
           markers, which have an embedded marker ID. Two different two-pass modes
           are also available, in which a matrix-detection pass is made first,
           followed by a template-matching pass.
-  
+
           @param {number} mode
               Options for this field are:
               artoolkitXjs.AR_TEMPLATE_MATCHING_COLOR
@@ -580,14 +583,14 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Set the size and ECC algorithm to be used for matrix code (2D barcode) marker detection.
-  
+
           When matrix-code (2D barcode) marker detection is enabled (see arSetPatternDetectionMode)
           then the size of the barcode pattern and the type of error checking and correction (ECC)
           with which the markers were produced can be set via this function.
-  
+
           This setting is global to a given ARHandle; It is not possible to have two different matrix
           code types in use at once.
-  
+
           @param      type The type of matrix code (2D barcode) in use. Options include:
               artoolkitXjs.ARMatrixCodeType.AR_MATRIX_CODE_3x3
               artoolkitXjs.ARMatrixCodeType.AR_MATRIX_CODE_3x3_HAMMING63
@@ -608,7 +611,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Returns the current matrix code (2D barcode) marker detection type.
-  
+
           @return {number} The current matrix code type. {@link setMatrixCodeType}
       */
     ARController.prototype.getMatrixCodeType = function () {
@@ -620,14 +623,14 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Select between detection of black markers and white markers.
-  
+
           ARToolKit's labelling algorithm can work with both black-bordered
           markers on a white background (AR_LABELING_BLACK_REGION) or
           white-bordered markers on a black background (AR_LABELING_WHITE_REGION).
           This function allows you to specify the type of markers to look for.
           Note that this does not affect the pattern-detection algorith
           which works on the interior of the marker.
-  
+
           @param {number}      mode
               Options for this field are:
               artoolkitXjs.AR_LABELING_WHITE_REGION
@@ -644,7 +647,7 @@ import artoolkitXjs from "./artoolkitx.js";
     /**
           Enquire whether detection is looking for black markers or white markers.
           See {@link #setLabelingMode}
-  
+
           @result {number} The current labeling mode see {@link setLabelingMode}.
       */
     ARController.prototype.getLabelingMode = function () {
@@ -655,7 +658,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Set the width/height of the marker pattern space, as a proportion of marker width/height.
-  
+
           @param {number}     pattRatio The the width/height of the marker pattern space, as a proportion of marker
               width/height. To set the default, pass artoolkitXjs.AR_PATT_RATIO.
       */
@@ -668,7 +671,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Returns the current ratio of the marker pattern to the total marker size.
-  
+
           @return {number} The current pattern ratio.
       */
     ARController.prototype.getPattRatio = function () {
@@ -679,7 +682,7 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Set the image processing mode.
-  
+
           When the image processing mode is AR_IMAGE_PROC_FRAME_IMAGE,
           artoolkitX processes all pixels in each incoming image
           to locate markers. When the mode is AR_IMAGE_PROC_FIELD_IMAGE,
@@ -691,7 +694,7 @@ import artoolkitXjs from "./artoolkitx.js";
           The effective reduction by 75% in the pixels processed also
           has utility in accelerating tracking by effectively reducing
           the image size to one quarter size, at the cost of pose accuraccy.
-  
+
           @param {number} mode
               Options for this field are:
               artoolkitXjs.AR_IMAGE_PROC_FRAME_IMAGE
@@ -708,7 +711,7 @@ import artoolkitXjs from "./artoolkitx.js";
     /**
           Get the image processing mode.
           See {@link #setImageProcMode} for a complete description.
-  
+
           @return {number} The current image processing mode.
       */
     ARController.prototype.getImageProcMode = function () {
@@ -719,13 +722,13 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           Draw the black and white image and debug markers to the ARController canvas.
-  
+
           See setDebugMode.
       */
-    ARController.prototype.debugDraw = function () {
-        // var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
-        // var id = new ImageData(debugBuffer, this.videoWidth, this.videoHeight);
-        // this.ctx.putImageData(id, 0, 0);
+     ARController.prototype.debugDraw = function () {
+         // var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
+         // var id = new ImageData(debugBuffer, this.videoWidth, this.videoHeight);
+         // this.ctx.putImageData(id, 0, 0);
 
         //Debug Luma
         var lumaBuffer = new Uint8ClampedArray(this.framesize);
@@ -937,22 +940,22 @@ import artoolkitXjs from "./artoolkitx.js";
 
     /**
           ARController.getUserMedia gets a device camera video feed and returns a Promis that will resolve in a {@link HTMLVideoElement}.
-  
+
           Tries to start playing the video. Playing the video can fail, if so an exception will be thown.
-  
+
           The configuration object supports the following attributes:
-  
+
               {
                   width : number | {min: number, max: number},
                   height : number | {min: number, max: number},
-  
+
                   facingMode : 'environment' | 'user' | 'left' | 'right' | { exact: 'environment' | ... }
                   deviceId : string | {exact: 'string'}
               }
-  
+
           See https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information about the
           width, height and facingMode attributes.
-  
+
           @param {object} configuration The configuration object.
           @return {HTMLVideoElement} Returns the created video element.
       */
@@ -1046,10 +1049,10 @@ import artoolkitXjs from "./artoolkitx.js";
     /**
           ARController.getUserMediaARController gets an ARController for the device camera video feed and calls the
           given onSuccess callback with it.
-  
+
           To use ARController.getUserMediaARController, call it with an object with the cameraParam attribute set to
           a camera parameter file URL, and the onSuccess attribute set to a callback function.
-  
+
               ARController.getUserMediaARController({
                   cameraParam: 'Data/camera_para.dat',
                   onSuccess: function(arController, arCameraParam) {
@@ -1058,26 +1061,26 @@ import artoolkitXjs from "./artoolkitx.js";
                       console.log("Got video", arController.image);
                   }
               });
-  
+
           The configuration object supports the following attributes:
-  
+
               {
                   cameraParam: url, // URL to camera parameters definition file.
                   maxARVideoSize: number, // Maximum max(width, height) for the AR processing canvas.
-  
+
                   width : number | {min: number, ideal: number, max: number},
                   height : number | {min: number, ideal: number, max: number},
-  
+
                   facingMode : 'environment' | 'user' | 'left' | 'right' | { exact: 'environment' | ... }
               }
-  
+
           See https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information about the
           width, height and facingMode attributes.
-  
+
           The orientation attribute of the returned ARController is set to "portrait" if the userMedia video has larger
           height than width. Otherwise it's set to "landscape". The videoWidth and videoHeight attributes of the arController
           are set to be always in landscape configuration so that width is larger than height.
-  
+
           @param {object} configuration The configuration object.
           @return {ARController} Returns the created {@link ARController}.
       */
