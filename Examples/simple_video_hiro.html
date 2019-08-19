@@ -1,55 +1,141 @@
 <html>
 <body>
-
+  <script src="./Data/js/third_party/three.js/three.min.js"></script>
         <script type='text/javascript'>
     window.artoolkitX_wasm_url = '../SDK/lib/artoolkitx.wasm';
         </script>
-
 
 <script type="module" src="../SDK/lib/artoolkitX.api.js"></script>
 <script type="module">
 import ARController from '../SDK/lib/artoolkitX.api.js';
 
 let ar1, interval;
-
 const cameraParam = './Data/camera_para.dat';
-
 const config = {
     cameraParam: cameraParam,
     width: 640,
     height: 480
 };
-
 var trackable = {
-    trackableType: "single",
+    trackableType: 'single',
     url: './Data/hiro.patt'
 }
-// window.addEventListener('artoolkitX-loaded', () => {
+
+window.addEventListener('artoolkitX-loaded', () => {
+
+const renderer = new THREE.WebGLRenderer();
+const scene = new THREE.Scene();
+const markerRoot = new THREE.Object3D();
+const camera = new THREE.PerspectiveCamera( 50, 640 /480, 0.0001, 100000 );
+camera.matrixAutoUpdate = false;
+const cameraRoot = new THREE.Object3D();
+cameraRoot.add(camera);
+scene.add(cameraRoot)
 
 ARController.getUserMediaARController(config).then( arController => {
+  arController.addEventListener('getMarker', (trackableInfo) => {
+      console.log("TrackableID: " + trackableInfo.data.trackableId + " visible");
+      const transformation = trackableInfo.data.transformation;
+      markerRoot.visible = true;
+      let rhMatrix = transformation
+      markerRoot.matrix.fromArray(transformation)
+  });
 
-    arController.addEventListener('getMarker', (trackableInfo) => {
-        console.log("TrackableID: " + trackableInfo.data.trackableId);
-        console.log(trackableInfo.data.transformation);
+  try {
+    arController.start().then( () => {
+      console.log("start done");
+      renderer.setSize(arController.canvas.width, arController.canvas.height);
+      document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+      const camMatrix = arController.getCameraMatrix(0.0001, 100000);
+      const fovy = 2 * Math.atan(1 / camMatrix[5]) * 180 / Math.PI;
+      const vh = arController.videoHeight
+      const vw = arController.videoWidth
+      const cw = arController.canvas.width
+      const ch = arController.canvas.height
+
+      // if (vw < vh) {
+      //     camera.fov = Math.abs(fovy) * (vh / vw);
+      // } else {
+      //     if (cw / ch > vw / vh) {
+      //         // Video Y FOV is limited so we must limit 3D camera FOV to match
+      //         camera.fov = Math.abs(fovy) * (vw / vh) / (cw / ch);
+      //     } else {
+      //         // Video Y FOV is limited so we must limit 3D camera FOV to match
+      //         camera.fov = Math.abs(fovy);
+      //     }
+      // }
+      camera.projectionMatrix.fromArray(camMatrix);
+      camera.updateProjectionMatrix();
+
+      var videoTex = new THREE.Texture(arController.image);
+      videoTex.minFilter = THREE.LinearFilter;
+      videoTex.flipY = false;
+
+      // Then create a plane textured with the video.
+      var plane = new THREE.Mesh(
+      new THREE.PlaneBufferGeometry(2, 2),
+      new THREE.MeshBasicMaterial({map: videoTex, side: THREE.DoubleSide})
+      );
+
+      // The video plane shouldn't care about the z-buffer.
+      plane.material.depthTest = false;
+      plane.material.depthWrite = false;
+
+      // Create a camera and a scene for the video plane and
+      // add the camera and the video plane to the scene.
+      var videoCamera = new THREE.OrthographicCamera(-1, 1, -1, 1, -1, 1);
+      var videoScene = new THREE.Scene();
+      videoScene.add(plane);
+      videoScene.add(videoCamera);
+
+      var light = new THREE.PointLight(0xffffff);
+      light.position.set(400, 500, 100);
+      scene.add(light);
+      var light = new THREE.PointLight(0xffffff);
+      light.position.set(-400, -500, -100);
+      scene.add(light);
+
+      markerRoot.wasVisible = false;
+      markerRoot.markerMatrix = new Float64Array(16);
+      markerRoot.matrixAutoUpdate = false;
+
+      // Add the marker models and suchlike into your marker root object.
+
+      var cube = new THREE.Mesh(
+        new THREE.BoxGeometry(40,40,40),
+        new THREE.MeshLambertMaterial({ color: 0x44ffff, wireframe: false })
+      );
+      cube.position.z = 20
+      markerRoot.add(cube);
+      markerRoot.visible = true;
+
+      // displaying axes onto the marker
+      var axesHelper = new THREE.AxesHelper( 500 );
+      markerRoot.add( axesHelper );
+
+      scene.add(markerRoot);
+
+      var trackableId = arController.addTrackable(trackable);
+      interval = setInterval(function() {
+          arController.process();
+          videoTex.needsUpdate = true;
+          const ac = renderer.autoClear;
+          renderer.autoClear = false;
+          renderer.clear();
+          renderer.render(videoScene, videoCamera);
+          renderer.render(scene, camera);
+          renderer.autoClear = ac;
+      }, 13);
+      ar1 = arController;
     });
+  }
+  catch (e) {
+      console.log(e);
+  }
+});
 
-    try {
-        arController.setLogLevel(0);
-        arController.start().then( () => {
-            console.log("start done");
-            var trackableId = arController.addTrackable(trackable);
-            interval = setInterval(function() {
-                arController.process();
-            }, 13);
-            ar1 = arController;
-        });
-    }
-    catch (e) {
-        console.log(e);
-    }
-} );
-
-// });
+});
 
 window.closeVideo = function() {
     if(ar1) {
@@ -65,5 +151,6 @@ window.closeVideo = function() {
 </script>
 
 <button onclick="window.closeVideo()">Close Video</button>
+<div id='matrix'></div>
 </body>
 </html>

@@ -1,33 +1,33 @@
 <html>
 <body>
-  <script src="js/third_party/three.js/three.min.js"></script>
+  <script src="./Data/js/third_party/three.js/three.min.js"></script>
         <script type='text/javascript'>
     window.artoolkitX_wasm_url = '../SDK/lib/artoolkitx.wasm';
         </script>
-        
+
 
         <script id="vert" type="glsl-vertex">
           precision highp float;
           precision lowp int;
-          
+
           uniform mat4 cameraMatrix;
           uniform mat4 transformationMatrix;
-          
+
           varying vec2 vUv;
-          
+
           void main(void)
           {
             vUv = uv;
             gl_Position = cameraMatrix * transformationMatrix * vec4(position, 1.0);
           }
           </script>
-          
+
           <script id="frag" type="glsl-fragment">
           precision highp float;
           precision lowp int;
-          
+
           varying vec2 vUv;
-          
+
           void main(void)
           {
             gl_FragColor = vec4(vUv, 1.0, 1.0);
@@ -46,7 +46,7 @@ const config = {
     cameraParam: cameraParam,
     width: 640,
     height: 480
-}; 
+};
 
 var trackable = {
     trackableType: "2d",
