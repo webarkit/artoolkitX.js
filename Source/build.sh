@@ -60,10 +60,9 @@ install_plugin() {
     VERSION=`cat ../version.txt`
     echo "Download lib"
 
-    curl --location "https://github.com/augmentmy-world/artoolkitx/releases/download/$VERSION/artoolkitX.js.zip" -o plugin.zip
-    unzip -o plugin.zip -d ../SDK/lib
-    rm plugin.zip
-    cp $ARTOOLKITXJS_HOME/Source/artoolkitX.api.js $ARTOOLKITXJS_HOME/SDK/lib/
+    curl --location "https://github.com/augmentmy-world/artoolkitx/releases/download/$VERSION/artoolkitXjs.zip" -o $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip
+    unzip -o $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip -d $ARTOOLKITXJS_HOME/SDK/lib
+    rm $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip
 }
 
 #### If a DEV build is running the script uses the path to artoolkitX source to build artoolkitX plugin-libraries from there
