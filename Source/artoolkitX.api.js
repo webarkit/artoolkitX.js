@@ -726,9 +726,17 @@ import artoolkitXjs from "./artoolkitx.js";
           See setDebugMode.
       */
      ARController.prototype.debugDraw = function () {
-         // var debugBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer, this._bwpointer, this.framesize);
-         // var id = new ImageData(debugBuffer, this.videoWidth, this.videoHeight);
-         // this.ctx.putImageData(id, 0, 0);
+        var videoMalloc = artoolkitXjs.videoMalloc;
+        var debugBuffer = new Uint8ClampedArray(artoolkitXjs.HEAPU8.buffer, videoMalloc.lumaFramePointer, videoMalloc.framesize);
+        var id = new ImageData(new Uint8ClampedArray(this.canvas.width*this.canvas.height*4), this.canvas.width, this.canvas.height);
+    		for (var i=0, j=0; i<debugBuffer.length; i++, j+=4) {
+    			var v = debugBuffer[i];
+    			id.data[j+0] = v;
+    			id.data[j+1] = v;
+    			id.data[j+2] = v;
+    			id.data[j+3] = 255;
+    		}
+        this.ctx.putImageData(id, 0, 0);
 
         //Debug Luma
         var lumaBuffer = new Uint8ClampedArray(this.framesize);
