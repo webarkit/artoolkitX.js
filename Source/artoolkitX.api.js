@@ -58,6 +58,7 @@ import artoolkitXjs from "./artoolkitx.js";
         this._lumaCtx = undefined;
         this.cameraParaFileURL = cameraPara;
         this.debug = false;
+        this.threshold = 100;
     };
 
     ARController.prototype.start = async function () {
@@ -516,6 +517,7 @@ import artoolkitXjs from "./artoolkitx.js";
           @param {number}     threshold An integer in the range [0,255] (inclusive).
       */
     ARController.prototype.setThreshold = function (threshold) {
+        this.threshold = threshold;
         artoolkitXjs.setTrackerOptionInt(
             artoolkitXjs.TrackableOptions.ARW_TRACKER_OPTION_SQUARE_THRESHOLD,
             threshold
@@ -731,7 +733,12 @@ import artoolkitXjs from "./artoolkitx.js";
         var id = new ImageData(new Uint8ClampedArray(this.canvas.width*this.canvas.height*4), this.canvas.width, this.canvas.height);
     		for (var i=0, j=0; i<debugBuffer.length; i++, j+=4) {
     			var v = debugBuffer[i];
-    			id.data[j+0] = v;
+          if (v > this.threshold) {
+            v = 255;
+          } else {
+            v = 0;
+          }
+          id.data[j+0] = v;
     			id.data[j+1] = v;
     			id.data[j+2] = v;
     			id.data[j+3] = 255;
