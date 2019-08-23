@@ -519,7 +519,7 @@ import artoolkitXjs from "./artoolkitx.js";
     ARController.prototype.setThreshold = function (threshold) {
         this.threshold = threshold;
         artoolkitXjs.setTrackerOptionInt(
-            artoolkitXjs.TrackableOptions.ARW_TRACKER_OPTION_SQUARE_THRESHOLD,
+            artoolkitXjs.TrackableOptions.ARW_TRACKER_OPTION_SQUARE_THRESHOLD.value,
             threshold
         );
     };
