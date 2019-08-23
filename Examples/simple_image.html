@@ -1,6 +1,6 @@
 <html>
 <body>
-  
+
 
 <img id="v1" src="./Data/armchair.jpg"></img>
     <script type='text/javascript'>
@@ -26,17 +26,20 @@ var trackable = {
 }
 
 window.addEventListener('artoolkitX-loaded', () => {
-  
+
 ar1.addEventListener('getMarker', (trackableInfo) => {
     console.log("TrackableID: " + trackableInfo.data.trackableId);
     console.log(trackableInfo.data.transformation);
 });
 
 try {
-    ar1.setLogLevel(0);    
+    // we set the Log level and so also a debug canvas
+    ar1.setLogLevel(0);
+    // we st a different Threshold
+    ar1.setThreshold(200);
     ar1.start().then( () => {
         console.log("start done");
-        var trackableId = ar1.addTrackable(trackable);    
+        var trackableId = ar1.addTrackable(trackable);
         interval = setInterval(function() {
           ar1.process(v1);
         }, 13);
