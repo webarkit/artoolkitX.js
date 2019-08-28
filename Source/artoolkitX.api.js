@@ -422,46 +422,6 @@ export default class ARController {
     return this[_queryTrackableVisibility](trackableUID)
   };
 
-  // /**
-  //  * T.B.: Make this function static as it is a util function and doesn't manipulate the ARController object (this)
-  //  *
-  //  Converts the given 3x4 marker transformation matrix in the 12-element transMat array
-  //  into a 4x4 WebGL matrix and writes the result into the 16-element glMat array.
-
-  //  If scale parameter is given, scales the transform of the glMat by the scale parameter.
-
-  //  @param {Float64Array} transMat The 3x4 marker transformation matrix.
-  //  @param {Float64Array} glMat The 4x4 GL transformation matrix.
-  //  @param {number} [scale] The scale for the transform.
-  // */
-  // ARController.transMatToGLMat = function(transMat, glMat, scale) {
-  //     if(glMat == undefined){
-  //         glMat = new Float64Array(16);
-  //     }
-  //  glMat[0 + 0*4] = transMat[0]; // R1C1
-  //  glMat[0 + 1*4] = transMat[1]; // R1C2
-  //  glMat[0 + 2*4] = transMat[2];
-  //  glMat[0 + 3*4] = transMat[3];
-  //  glMat[1 + 0*4] = transMat[4]; // R2
-  //  glMat[1 + 1*4] = transMat[5];
-  //  glMat[1 + 2*4] = transMat[6];
-  //  glMat[1 + 3*4] = transMat[7];
-  //  glMat[2 + 0*4] = transMat[8]; // R3
-  //  glMat[2 + 1*4] = transMat[9];
-  //  glMat[2 + 2*4] = transMat[10];
-  //  glMat[2 + 3*4] = transMat[11];
-  //  glMat[3 + 0*4] = 0.0;
-  //  glMat[3 + 1*4] = 0.0;
-  //  glMat[3 + 2*4] = 0.0;
-  //  glMat[3 + 3*4] = 1.0;
-  //  if (scale != undefined && scale !== 0.0) {
-  //   glMat[12] *= scale;
-  //   glMat[13] *= scale;
-  //   glMat[14] *= scale;
-  //  }
-  //  return glMat;
-  // };
-
   /**
   * Returns the projection matrix computed from camera parameters for the ARController.
   *
