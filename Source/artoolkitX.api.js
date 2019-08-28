@@ -148,7 +148,6 @@ export default class ARController {
     this.canvas.height = this.videoHeight
     this.videoSize = this.videoWidth * this.videoHeight
     this.defaultMarkerWidth = 80
-    this.default2dHeight = 0.001
     this.trackables = []
     this.transform_mat = new Float64Array(16)
     this.cameraParaFileURL = cameraPara
@@ -377,9 +376,8 @@ export default class ARController {
      */
   async addTrackable (trackableObj) {
     if (!trackableObj.width) { trackableObj.width = this.defaultMarkerWidth }
-    if (!trackableObj.height) trackableObj.height = this.default2dHeight
     let fileName, trackableId
-    if (trackableObj.trackableType.includes('single') || trackableObj.trackableType.includes('2d')) {
+    if (trackableObj.trackableType.includes('single')) {
       if (trackableObj.barcodeId !== undefined) {
         fileName = trackableObj.barcodeId
         if (!this._patternDetection.barcode) {
@@ -395,12 +393,9 @@ export default class ARController {
           this._patternDetection.template = true
         }
       }
-      if (trackableObj.trackableType.includes('2d')) {
-        this.has2DTrackable = true
-        trackableId = artoolkitXjs.addTrackable(trackableObj.trackableType + ';' + fileName + ';' + trackableObj.height)
-      } else {
-        trackableId = artoolkitXjs.addTrackable(trackableObj.trackableType + ';' + fileName + ';' + trackableObj.width)
-      }
+
+      trackableId = artoolkitXjs.addTrackable(trackableObj.trackableType + ';' + fileName + ';' + trackableObj.width)
+
     } else if (trackableObj.trackableType === 'multi') {
       fileName = await ARController[_loadMultiTrackable](trackableObj.url)
       // fileName = await ARController[_loadTrackable](trackableObj.url);
