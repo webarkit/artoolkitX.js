@@ -913,9 +913,9 @@ export default class ARController {
 
   // static
   /**
-        ARController.getUserMedia gets a device camera video feed and returns a Promis that will resolve in a {@link HTMLVideoElement}.
+        ARController.getUserMedia gets a device camera video feed and returns a Promise that will resolve in a {@link HTMLVideoElement}.
 
-        Tries to start playing the video. Playing the video can fail, if so an exception will be thown.
+        Tries to start playing the video. Playing the video can fail, if so an exception will be thrown.
 
         The configuration object supports the following attributes of {@see MediaTrackConstraints} {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints}:
 
