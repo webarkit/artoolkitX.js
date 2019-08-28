@@ -1054,16 +1054,6 @@ export default class ARController {
     const arController = new ARController(webcam, cameraParamURL, configuration.width, configuration.height)
     return arController
   };
-  /**
- Converts the given 4x4 openGL matrix in the 16-element transMat array
-  into a 4x4 OpenGL Right-Hand-View matrix and writes the result into the 16-element glMat array.
-
-  If scale parameter is given, scales the transform of the glMat by the scale parameter.
-
-  @param {Float32Array} glMatrix The 4x4 marker transformation matrix.
-  @param {Float32Array} [glRhMatrix] The 4x4 GL right hand transformation matrix.
-  @param {number} [scale] The scale for the transform.
-*/
 
   /**
     Converts the given 3x4 marker transformation matrix in the 12-element transMat array
@@ -1103,6 +1093,16 @@ export default class ARController {
     return glMat
   };
 
+    /**
+   Converts the given 4x4 openGL matrix in the 16-element transMat array
+    into a 4x4 OpenGL Right-Hand-View matrix and writes the result into the 16-element glMat array.
+
+    If scale parameter is given, scales the transform of the glMat by the scale parameter.
+
+    @param {Float32Array} glMatrix The 4x4 marker transformation matrix.
+    @param {Float32Array} [glRhMatrix] The 4x4 GL right hand transformation matrix.
+    @param {number} [scale] The scale for the transform.
+  */
   static arglCameraViewRHf (glMatrix, glRhMatrix, scale) {
     let _modelview
     if (glRhMatrix === undefined) {
