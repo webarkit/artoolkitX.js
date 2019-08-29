@@ -1,5 +1,6 @@
-# ARToolkitX.js
-Emscripten port of ARToolKitX to JavaScript.
+# ArtoolkitX.js
+Emscripten port of ARToolKitX to JavaScript. **ArtoolkitX.js** is a javascript library for augmented reality.
+**ArtoolkitX.js** follow the modern **ES6** javascript standard and can be imported as a module.
 
 ## Requirements
 - Emscripten installed, go to this page for instructions: https://emscripten.org/docs/getting_started/downloads.html
