@@ -1,4 +1,4 @@
 [submodule "Source/extras/artoolkitx"]
 	path = Source/extras/artoolkitx
-	url = git@github.com:augmentmy-world/artoolkitx.git
-  branch = emscripten
+	url = git@github.com:webarkit/artoolkitX_em_2d.git
+  branch = 2dtrackerWeb
