@@ -81,7 +81,7 @@ else
     # ======================================================================
     echo "Downloading the artoolkitX plugin-libraries."
     VERSION=`cat ../version.txt`
-    curl --location "https://github.com/augmentmy-world/artoolkitx/releases/download/$VERSION/artoolkitXjs.zip" -o $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip
+    curl --location "https://github.com/webarkit/artoolkitX_em_2d/releases/download/$VERSION/artoolkitXjs.zip" -o $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip
     unzip -o $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip -d $ARTOOLKITXJS_HOME/SDK/lib
     rm $ARTOOLKITXJS_HOME/SDK/lib/plugin.zip
 fi
