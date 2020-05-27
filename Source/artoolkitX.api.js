@@ -148,6 +148,8 @@ export default class ARController {
     this.canvas.height = this.videoHeight
     this.videoSize = this.videoWidth * this.videoHeight
     this.defaultMarkerWidth = 80
+    this.default2dHeight = 0.001
+
     this.trackables = []
     this.transform_mat = new Float64Array(16)
     this.cameraParaFileURL = cameraPara
@@ -259,12 +261,6 @@ export default class ARController {
   };
 
   _processImage (image) {
-    // Only process every 2nd frame because 2D tracking is slow
-    if (this.has2DTrackable && this.count !== 1) {
-      this.count = 1
-      return
-    }
-    this.count = 2
     try {
       this[_prepareImage](image)
       const success = artoolkitXjs._arwUpdateAR()
@@ -377,8 +373,9 @@ export default class ARController {
      */
   async addTrackable (trackableObj) {
     if (!trackableObj.width) { trackableObj.width = this.defaultMarkerWidth }
+    if (!trackableObj.height) trackableObj.height = this.default2dHeight
     let fileName, trackableId
-    if (trackableObj.trackableType.includes('single')) {
+    if (trackableObj.trackableType.includes('single') || trackableObj.trackableType.includes('2d')) {
       if (trackableObj.barcodeId !== undefined) {
         fileName = trackableObj.barcodeId
         if (!this._patternDetection.barcode) {
@@ -394,9 +391,12 @@ export default class ARController {
           this._patternDetection.template = true
         }
       }
-
-      trackableId = artoolkitXjs.addTrackable(trackableObj.trackableType + ';' + fileName + ';' + trackableObj.width)
-
+      if (trackableObj.trackableType.includes('2d')) {
+        this.has2DTrackable = true
+        trackableId = artoolkitXjs.addTrackable(trackableObj.trackableType + ';' + fileName + ';' + trackableObj.height)
+      } else {
+        trackableId = artoolkitXjs.addTrackable(trackableObj.trackableType + ';' + fileName + ';' + trackableObj.width)
+      }
     } else if (trackableObj.trackableType === 'multi') {
       fileName = await ARController[_loadMultiTrackable](trackableObj.url)
       // fileName = await ARController[_loadTrackable](trackableObj.url);
