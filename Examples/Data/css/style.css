@@ -1,0 +1,28 @@
+html,
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.stats {
+  top: 0;
+  left: 0;
+  z-index: 200;
+  margin: 0.5rem;
+  padding: 0.5rem 0.5rem 0;
+}
+
+.stats-item {
+  margin: 0 0 0.5rem;
+
+}
+
+.stats-item-title {
+  margin: 0 0 0.25rem;
+
+  font-size: 0.75rem;
+}
+
+#stats div {
+  position: relative !important;
+}
