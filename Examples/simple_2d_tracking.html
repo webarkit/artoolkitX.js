@@ -153,11 +153,8 @@ ARController.getUserMediaARController(config).then( arController => {
   // Add the marker root to your scene.
   scene.add(markerRoot);
 
-
     arController.addEventListener('getMarker', (trackableInfo) => {
         console.log("TrackableID: " + trackableInfo.data.trackableId);
-        document.getElementById('matrix').innerHTML = "matrix: " + trackableInfo.data.transformation;
-        const transformation = trackableInfo.data.transformation;
         markerRoot.visible = true;
         markerRoot.matrix.elements = trackableInfo.data.transformation
     });
@@ -203,7 +200,6 @@ window.closeVideo = function() {
 
 </script>
 
-<button onclick="window.closeVideo()">Close Video</button>
-<div id='matrix'></div>
+<button class="ui marker" onclick="window.closeVideo()">Close Video</button>
 </body>
 </html>
