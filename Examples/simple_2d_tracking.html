@@ -1,6 +1,17 @@
 <html>
+<head>
+  <link rel="stylesheet" href="./Data/css/style.css">
+</head>
 <body>
+  <div id="stats" class="ui stats">
+    <div id="stats" class="stats-item">
+        <p class="stats-item-title">
+          Stats
+        </p>
+    </div>
+  </div>
   <script src="./Data/js/third_party/three.js/three.min.js"></script>
+  <script src="./Data/js/third_party/three.js/stats.min.js"></script>
         <script type='text/javascript'>
     window.artoolkitX_wasm_url = '../SDK/lib/artoolkitx.wasm';
         </script>
@@ -37,6 +48,10 @@
 <script type="module" src="../SDK/lib/artoolkitX.api.js"></script>
 <script type="module">
 import ARController from '../SDK/lib/artoolkitX.api.js';
+
+var statsMain = new Stats();
+statsMain.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.getElementById( 'stats' ).appendChild( statsMain.dom );
 
 let ar1, interval;
 
@@ -158,6 +173,7 @@ ARController.getUserMediaARController(config).then( arController => {
                 const ac = renderer.autoClear;
                 renderer.autoClear = false;
                 renderer.clear();
+                statsMain.update()
                 renderer.render(videoScene, videoCamera);
                 renderer.render(scene, camera);
                 renderer.autoClear = ac;
