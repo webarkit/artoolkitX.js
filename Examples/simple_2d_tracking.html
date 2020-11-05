@@ -93,7 +93,6 @@ ARController.getUserMediaARController(config).then( arController => {
   renderer.setSize(config.width, config.height);
   document.body.appendChild(renderer.domElement);
 
-
     var videoTex = new THREE.Texture(arController.image);
 
     videoTex.minFilter = THREE.LinearFilter;
@@ -143,14 +142,16 @@ ARController.getUserMediaARController(config).then( arController => {
   );
   markerRoot.add(cube);
   markerRoot.visible = true;
+  // adding a grid xz and an axesHelper
+  var axesHelper = new THREE.AxesHelper( 5 );
+  markerRoot.add( axesHelper );
+
+  var gridXZ = new THREE.GridHelper(10, 10);
+  markerRoot.add(gridXZ);
 
   // Add the marker root to your scene.
   scene.add(markerRoot);
-  var axesHelper = new THREE.AxesHelper( 5 );
-  scene.add( axesHelper );
-  //grid xz
- var gridXZ = new THREE.GridHelper(10, 1);
- scene.add(gridXZ);
+
 
     arController.addEventListener('getMarker', (trackableInfo) => {
         console.log("TrackableID: " + trackableInfo.data.trackableId);
