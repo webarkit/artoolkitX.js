@@ -4,7 +4,7 @@
 </head>
 <body>
   <div id="stats" class="ui stats">
-    <div id="stats" class="stats-item">
+    <div class="stats-item">
         <p class="stats-item-title">
           Stats
         </p>
@@ -92,6 +92,7 @@ ARController.getUserMediaARController(config).then( arController => {
 
   renderer.setSize(config.width, config.height);
   document.body.appendChild(renderer.domElement);
+  renderer.domElement.style = 'position: absolute; width: 100%; height: 100%'
 
     var videoTex = new THREE.Texture(arController.image);
 
